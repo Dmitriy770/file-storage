@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  app:
+    restart: unless-stopped
+    build:
+      dockerfile: build/Dockerfile
+    ports:
+      - '8080:80'
+    external_links:
+      - storage
+  
+  storage:
+    image: mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password

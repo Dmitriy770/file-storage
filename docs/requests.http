@@ -1,0 +1,32 @@
+@host=http://localhost:8080
+
+### upload file
+
+POST {{host}}/files/file1
+Content-Type: image/png
+
+< ./requests_files/image1.png
+
+
+### get file
+
+GET {{host}}/files/file1
+
+### delete file
+
+DELETE {{host}}/files/file1
+
+### update file
+
+PUT  {{host}}/files/file1
+Content-Type: application/json
+
+< ./requests_files/random.json
+
+### get files
+
+GET  {{host}}/files
+
+### get info 
+
+GET  {{host}}/files/file1/info
