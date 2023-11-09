@@ -46,12 +46,14 @@ func main() {
 	}
 
 	router := chi.NewRouter()
-	router.Post("/files/{fileName}", upload.New(bucket))
-	router.Get("/files/{fileName}", get.New(bucket))
-	router.Delete("/files/{fileName}", delete.New(bucket))
-	router.Put("/files/{fileName}", update.New(bucket))
+	router.Route("/files/{fileName}", func(r chi.Router) {
+		r.Post("/", upload.New(bucket))
+		r.Get("/", get.New(bucket))
+		r.Delete("/", delete.New(bucket))
+		r.Put("/", update.New(bucket))
+		r.Get("/info", getinfo.New(bucket))
+	})
 	router.Get("/files", getall.New(bucket))
-	router.Get("/files/{fileName}/info", getinfo.New(bucket))
 
 	server := &http.Server{
 		Addr:    ADDRESS,
