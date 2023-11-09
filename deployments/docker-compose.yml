@@ -5,10 +5,12 @@ services:
     restart: unless-stopped
     build:
       dockerfile: build/Dockerfile
-    ports:
-      - '8080:80'
-    external_links:
+    environment:
+      - MONGODB_ADDRESS=mongodb://root:password@storage:27017/?retryWrites=true&w=majority
+      - ADDRESS=app:80
+    depends_on:
       - storage
+      - nginx
   
   storage:
     image: mongo
@@ -16,3 +18,11 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - '8080:80'
+

@@ -23,17 +23,6 @@ func New(bucket *gridfs.Bucket) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fileName := chi.URLParam(r, "fileName")
 
-		// _, err := bucket.DownloadToStream(fileName, w)
-		// if errors.Is(err, gridfs.ErrFileNotFound) {
-		// 	w.WriteHeader(http.StatusNotFound)
-		// 	return
-		// }
-		// if err != nil {
-		// 	slog.Error("get file", err)
-		// 	w.WriteHeader(http.StatusInternalServerError)
-		// 	return
-		// }
-
 		cursor, err := bucket.Find(bson.D{})
 		if err != nil {
 			slog.Error("get all files", err)

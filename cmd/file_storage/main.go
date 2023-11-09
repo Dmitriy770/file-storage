@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net/http"
+	"os"
 
 	"github.com/Dmitriy770/file-storage/internal/http_server/handlers/delete"
 	"github.com/Dmitriy770/file-storage/internal/http_server/handlers/get"
@@ -16,8 +17,18 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var (
+	ADDRESS         string
+	MONGODB_ADDRESS string
+)
+
+func init() {
+	ADDRESS = os.Getenv("ADDRESS")
+	MONGODB_ADDRESS = os.Getenv("MONGODB_ADDRESS")
+}
+
 func main() {
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://root:password@storage:27017/?retryWrites=true&w=majority"))
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(MONGODB_ADDRESS))
 	if err != nil {
 		panic(err)
 	}
@@ -43,7 +54,7 @@ func main() {
 	router.Get("/files/{fileName}/info", getinfo.New(bucket))
 
 	server := &http.Server{
-		Addr:    "app:80",
+		Addr:    ADDRESS,
 		Handler: router,
 	}
 
